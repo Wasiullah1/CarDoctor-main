@@ -19,6 +19,30 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? name;
+  String? email;
+  String? phone;
+  String? name1;
+  String? email1;
+  String? phone1;
+  @override
+  void initState() {
+    super.initState();
+    name = CurrentAppUser.currentUserData.name ??
+        CurrentMechanicUser.currentUserMechanicData.name ??
+        "";
+    email = CurrentAppUser.currentUserData.email ??
+        CurrentMechanicUser.currentUserMechanicData.email ??
+        "";
+    phone = CurrentAppUser.currentUserData.phone ??
+        CurrentMechanicUser.currentUserMechanicData.phone ??
+        "";
+    setState(() {});
+  }
+
+  bool showSpinner = false;
+
   final ref = FirebaseStorage.instance.ref('images');
   bool isUploading = false;
 
@@ -117,84 +141,156 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                          child: Badge(
-                        badgeColor: Colors.white70,
-                        position: BadgePosition.bottomEnd(),
-                        badgeContent: InkWell(
-                          onTap: () => dialog(context),
-                          child: isUploading
-                              ? CircularProgressIndicator()
-                              : Icon(
-                                  Icons.camera_alt,
-                                  // color: Colors.grey.shade500,
-                                  size: 30.0,
-                                ),
+      backgroundColor: AppColors.secondaryColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                  child: Badge(
+                badgeColor: Colors.white70,
+                position: BadgePosition.bottomEnd(),
+                badgeContent: InkWell(
+                  onTap: () => dialog(context),
+                  child: isUploading
+                      ? CircularProgressIndicator()
+                      : Icon(
+                          Icons.camera_alt,
+                          // color: Colors.grey.shade500,
+                          size: 30.0,
                         ),
-                        child: Container(
-                          height: 130,
-                          width: 130,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: AppColors.primaryColor, width: 5)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image(
-                                image: NetworkImage(
-                                  CurrentAppUser.currentUserData.image ??
-                                      CurrentMechanicUser
-                                          .currentUserMechanicData.image ??
-                                      "https://firebasestorage.googleapis.com/v0/b/cardoctor-1f2c7.appspot.com/o/images%2Fdefault.png?alt=media&token=0b0b0b0b-0b0b-0b0b-0b0b-0b0b0b0b0b0b",
-                                ),
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    child: Icon(
-                                      Icons.error_outline,
-                                      color: Colors.red,
-                                    ),
-                                  );
-                                }),
-                          ),
+                ),
+                child: Container(
+                  height: 130,
+                  width: 130,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border:
+                          Border.all(color: AppColors.primaryColor, width: 5)),
+                  child: ClipOval(
+                    // borderRadius: BorderRadius.circular(100),
+                    child: Image(
+                        image: NetworkImage(
+                          CurrentAppUser.currentUserData.image ??
+                              CurrentMechanicUser
+                                  .currentUserMechanicData.image ??
+                              "https://firebasestorage.googleapis.com/v0/b/cardoctor-1f2c7.appspot.com/o/images%2Fdefault.png?alt=media&token=0b0b0b0b-0b0b-0b0b-0b0b-0b0b0b0b0b0b",
                         ),
-                      )),
-                    ]))));
-
-    // StreamBuilder(
-    //   stream: ref.child(SessionController().userID.toString()).onValue,
-    //   builder: (context, AsyncSnapshot snapshot) {
-    //     if (!snapshot.hasData) {
-    //       return Center(child: CircularProgressIndicator());
-    //     } else if (snapshot.hasData) {
-    //       return
-    //             ),
-    //           ]);
+                        fit: BoxFit.fill,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(child: CircularProgressIndicator());
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            child: Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                            ),
+                          );
+                        }),
+                  ),
+                ),
+              )),
+              SizedBox(height: 20),
+              Text(
+                " $name",
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontFamily: 'Pacifico',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              // Text(
+              //   "$email".toUpperCase(),
+              //   style: TextStyle(
+              //     fontSize: 20.0,
+              //     fontFamily: 'SourceSansPro',
+              //     color: Colors.teal.shade100,
+              //     fontWeight: FontWeight.bold,
+              //     letterSpacing: 2.5,
+              //   ),
+              // ),
+              SizedBox(
+                height: 20.0,
+                width: 150,
+                child: Divider(
+                  color: Colors.teal.shade100,
+                ),
+              ),
+              InkWell(
+                child: Card(
+                  margin:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.phone,
+                      color: Colors.teal,
+                    ),
+                    title: Text(
+                      '$phone',
+                      style: TextStyle(
+                          fontFamily: 'SourceSansPro',
+                          fontSize: 20,
+                          color: Colors.teal.shade900),
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                child: Card(
+                  margin:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.email,
+                      color: Colors.teal,
+                    ),
+                    title: Text(
+                      '$email'.toUpperCase(),
+                      style: TextStyle(
+                          fontFamily: 'SourceSansPro',
+                          fontSize: 20,
+                          color: Colors.teal.shade900),
+                    ),
+                  ),
+                ),
+                // onTap: (){
+                //   _launchURL('mailto:fadcrepin@gmail.com?subject=Need Flutter developer&body=Please contact me');
+                // },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  void toastMessage(String message) {
-    Fluttertoast.showToast(
-        msg: message.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.SNACKBAR,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
+  // StreamBuilder(
+  //   stream: ref.child(SessionController().userID.toString()).onValue,
+  //   builder: (context, AsyncSnapshot snapshot) {
+  //     if (!snapshot.hasData) {
+  //       return Center(child: CircularProgressIndicator());
+  //     } else if (snapshot.hasData) {
+  //       return
+  //             ),
+  //           ]);
+}
+
+void toastMessage(String message) {
+  Fluttertoast.showToast(
+      msg: message.toString(),
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.SNACKBAR,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
