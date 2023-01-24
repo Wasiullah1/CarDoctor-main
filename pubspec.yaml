@@ -50,6 +50,9 @@ dependencies:
   flutter_custom_clippers: ^2.0.0
   firebase_database: ^10.0.7
   typicons_flutter: ^0.5.0
+  flutter_local_notifications: ^13.0.0
+  timezone: ^0.9.1
+  flutter_native_timezone: ^2.0.0
   # date_time_picker: ^2.1.0
 
 dev_dependencies:
