@@ -1,14 +1,11 @@
-import 'dart:io';
-import 'package:badges/badges.dart';
 import 'package:cardoctor/Models/current_aap_user.dart';
-import 'package:cardoctor/components/button.dart';
 import 'package:cardoctor/res/color.dart';
+import 'package:cardoctor/screen/contactus.dart';
 import 'package:cardoctor/screen/loginscreen.dart';
 import 'package:cardoctor/screen/profilescreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -22,15 +19,15 @@ class _MyDrawerState extends State<MyDrawer> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? name;
   String? email;
-  String? name1;
-  String? email1;
   @override
   void initState() {
     super.initState();
-    name = CurrentAppUser.currentUserData.name ?? "";
-    email = CurrentAppUser.currentUserData.email ?? "";
-    name1 = CurrentMechanicUser.currentUserMechanicData.name ?? "";
-    email1 = CurrentMechanicUser.currentUserMechanicData.email ?? "";
+    name = CurrentAppUser.currentUserData.name ??
+        CurrentMechanicUser.currentUserMechanicData.name ??
+        "";
+    email = CurrentAppUser.currentUserData.email ??
+        CurrentMechanicUser.currentUserMechanicData.email ??
+        "";
     setState(() {});
   }
 
@@ -84,14 +81,14 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               SizedBox(height: 5.0),
               Text(
-                " $name $name1",
+                " $name",
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
               Text(
-                "$email $email1",
+                "$email",
                 style: TextStyle(color: AppColors.grayColor, fontSize: 16.0),
               ),
               SizedBox(height: 30.0),
@@ -113,7 +110,32 @@ class _MyDrawerState extends State<MyDrawer> {
               _buildDivider(),
               _buildRow(Icons.settings, "Settings"),
               _buildDivider(),
-              _buildRow(Icons.email, "Contact us"),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ContactUs(
+                                  logo: AssetImage('assets/images/arslan1.jpg'),
+                                  companyName: 'Arslan Shaikh',
+                                  textColor: AppColors.primaryColor,
+                                  companyColor: AppColors.primaryTextTextColor,
+                                  email: 'arslanshaikhshp@gmail.com',
+                                  cardColor: Colors.white,
+                                  taglineColor: AppColors.secondaryTextColor,
+                                  phoneNumber: '+923003433317',
+                                  dividerThickness: 2,
+                                  githubUserName: 'Arslan252000',
+                                  linkedinURL:
+                                      'https://www.linkedin.com/in/arslan-shaikh-465b56214',
+                                  tagLine: 'Flutter Developer',
+
+                                  facebookHandle:
+                                      'arslan.shaikh.568?mibextid=LQQJ4d',
+                                  //instagramUserName: '_abhishek_doshi',
+                                ))).then((value) => setState(() {}));
+                  },
+                  child: _buildRow(Icons.email, "Contact us")),
               _buildDivider(),
               _buildRow(Icons.info_outline, "Help"),
               _buildDivider(),
