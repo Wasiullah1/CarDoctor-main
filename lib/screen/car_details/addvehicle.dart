@@ -165,7 +165,7 @@ class _AddVehicleState extends State<AddVehicle> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "${car['makeModel']}",
+                                            "${car['carMake']}",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontSize: 22,
@@ -173,19 +173,56 @@ class _AddVehicleState extends State<AddVehicle> {
                                                 color: AppColors.primaryColor),
                                           ),
                                           InkWell(
-                                              onTap: () {},
+                                              onTap: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                            "Delete Vehicle"),
+                                                        content: Text(
+                                                            "Are you sure you want to delete this vehicle?"),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Text(
+                                                                  "Cancel")),
+                                                          TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "garage")
+                                                                    .doc(uid)
+                                                                    .collection(
+                                                                        "cars")
+                                                                    .doc(car.id)
+                                                                    .delete();
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Text(
+                                                                  "Delete"))
+                                                        ],
+                                                      );
+                                                    });
+                                              },
                                               child: Icon(Icons.delete))
                                         ],
                                       ),
                                       SizedBox(height: 10),
-                                      // Text(
-                                      //   "${car['makeModel'] ?? ""}",
-                                      //   style: TextStyle(
-                                      //       fontSize: 16,
-                                      //       fontWeight: FontWeight.normal,
-                                      //       color: AppColors.primaryColor),
-                                      // ),
-                                      // SizedBox(height: 10),
+                                      Text(
+                                        "${car['modelYear'] ?? ""}",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: AppColors.primaryColor),
+                                      ),
+                                      SizedBox(height: 10),
                                       Expanded(
                                         child: RoundButton(
                                             title: "View Details",

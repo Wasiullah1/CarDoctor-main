@@ -15,7 +15,8 @@ class BasicInfo extends StatefulWidget {
 class _BasicInfoState extends State<BasicInfo> {
   DateTime selectedDate = DateTime.now();
   String rideType = '';
-  String makeModel = '';
+  String modelYear = '';
+  String carMake = '';
 
   // Future<void> _selectDate(BuildContext context) async {
   //   final DateTime? picked = await showDatePicker(
@@ -96,7 +97,7 @@ class _BasicInfoState extends State<BasicInfo> {
                 }).toList(),
                 onChanged: (_) {
                   setState(() {
-                    makeModel = _!;
+                    modelYear = _!;
                   });
                 },
               ),
@@ -121,43 +122,7 @@ class _BasicInfoState extends State<BasicInfo> {
                 }).toList(),
                 onChanged: (_) {
                   setState(() {
-                    makeModel = _!;
-                  });
-                },
-              ),
-              SizedBox(height: 30),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.car_rental_sharp),
-                ),
-                hint: Text('Ride type'),
-                items: <String>['Car', 'Bike'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: new Text(value),
-                  );
-                }).toList(),
-                onChanged: (_) {
-                  setState(() {
-                    rideType = _!;
-                  });
-                },
-              ),
-              SizedBox(height: 30),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.car_rental_sharp),
-                ),
-                hint: Text('Ride type'),
-                items: <String>['Car', 'Bike'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: new Text(value),
-                  );
-                }).toList(),
-                onChanged: (_) {
-                  setState(() {
-                    rideType = _!;
+                    carMake = _!;
                   });
                 },
               ),
@@ -169,8 +134,8 @@ class _BasicInfoState extends State<BasicInfo> {
                         CurrentMechanicUser.currentUserMechanicData.uid;
                     if (rideType == null ||
                         rideType.isEmpty ||
-                        makeModel == null ||
-                        makeModel.isEmpty ||
+                        carMake == null ||
+                        modelYear.isEmpty ||
                         selectedDate == null) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text("Please fill all the fields")));
@@ -180,6 +145,7 @@ class _BasicInfoState extends State<BasicInfo> {
                           SnackBar(content: Text("Please login first")));
                       return;
                     } else {
+                      print("carMake: $carMake");
                       var docId =
                           DateTime.now().millisecondsSinceEpoch.toString();
                       var doc = await FirebaseFirestore.instance
@@ -189,8 +155,8 @@ class _BasicInfoState extends State<BasicInfo> {
                           .doc(docId)
                           .set({
                         'rideType': rideType,
-                        'makeModel': makeModel,
-                        'selectedDate': selectedDate,
+                        'modelYear': modelYear,
+                        'carMake': carMake,
                       });
 
                       Navigator.push(

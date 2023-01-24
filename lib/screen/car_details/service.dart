@@ -1,5 +1,6 @@
 import 'package:cardoctor/Models/current_aap_user.dart';
 import 'package:cardoctor/components/button.dart';
+import 'package:cardoctor/notification_handler.dart';
 import 'package:cardoctor/res/color.dart';
 import 'package:cardoctor/screen/homescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,11 +17,9 @@ class _ServiceCategoryState extends State<ServiceCategory> {
   var _formKey = GlobalKey<FormState>();
   TextEditingController cost = TextEditingController();
   TextEditingController mileage = TextEditingController();
-  String dropdownvalue1 = 'dd/mm/yyyy';
+  TextEditingController serviceDate = TextEditingController();
+  TextEditingController nextDate = TextEditingController();
 
-  var date = [
-    'dd/mm/yyyy',
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +54,7 @@ class _ServiceCategoryState extends State<ServiceCategory> {
             Padding(
               padding: EdgeInsets.only(top: 40, left: 20, right: 20),
               child: Container(
-                height: 500.0,
+                // height: 500.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   color: AppColors.successColor,
@@ -93,42 +92,33 @@ class _ServiceCategoryState extends State<ServiceCategory> {
                         SizedBox(
                           height: 10,
                         ),
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: AppColors.primaryTextTextColor,
-                              border:
-                                  Border.all(color: Colors.black38, width: 3),
-                              borderRadius: BorderRadius.circular(50),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.57),
-                                    blurRadius: 5)
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 40, right: 40),
-                            child: DropdownButton(
-                              borderRadius: BorderRadius.circular(20),
-                              focusColor: Colors.white,
-                              value: dropdownvalue1,
-                              icon: Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Icon(Icons.arrow_circle_down_sharp)),
-                              iconEnabledColor: AppColors.primaryColor,
-                              style: TextStyle(
-                                  color: AppColors.secondaryTextColor,
-                                  fontSize: 20),
-                              items: date.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue1 = newValue!;
-                                });
-                              },
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 40, right: 40),
+                          child: TextFormField(
+                            controller: serviceDate,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'required';
+                              } else
+                                return null;
+                            },
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.currency_rupee_sharp),
+                                hintText: 'Service Date',
+                                labelText: 'Service Date',
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                hintStyle: TextStyle(
+                                  color: AppColors.hintColor,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                labelStyle: TextStyle(
+                                    color: AppColors.hintColor,
+                                    fontWeight: FontWeight.normal)),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -249,42 +239,33 @@ class _ServiceCategoryState extends State<ServiceCategory> {
                         SizedBox(
                           height: 10,
                         ),
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                              color: AppColors.primaryTextTextColor,
-                              border:
-                                  Border.all(color: Colors.black38, width: 3),
-                              borderRadius: BorderRadius.circular(50),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.57),
-                                    blurRadius: 5)
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 40, right: 40),
-                            child: DropdownButton(
-                              borderRadius: BorderRadius.circular(20),
-                              focusColor: Colors.white,
-                              value: dropdownvalue1,
-                              icon: Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Icon(Icons.arrow_circle_down_sharp)),
-                              iconEnabledColor: AppColors.primaryColor,
-                              style: TextStyle(
-                                  color: AppColors.secondaryTextColor,
-                                  fontSize: 20),
-                              items: date.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue1 = newValue!;
-                                });
-                              },
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 40, right: 40),
+                          child: TextFormField(
+                            controller: nextDate,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'required';
+                              } else
+                                return null;
+                            },
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.currency_rupee_sharp),
+                                hintText: 'Next Service Date',
+                                labelText: 'Next Service Date',
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                hintStyle: TextStyle(
+                                  color: AppColors.hintColor,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                labelStyle: TextStyle(
+                                    color: AppColors.hintColor,
+                                    fontWeight: FontWeight.normal)),
                           ),
                         ),
                       ],
@@ -299,6 +280,12 @@ class _ServiceCategoryState extends State<ServiceCategory> {
                   title: "Save",
                   onPress: () async {
                     if (_formKey.currentState!.validate()) {
+                      if (DateTime.tryParse(nextDate.text) == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Invalid Next Date Entered"),
+                        ));
+                        return;
+                      }
                       _formKey.currentState!.save();
                       print("Cost: ${cost.text}");
                       print("Current Mileage: ${mileage.text}");
@@ -313,9 +300,21 @@ class _ServiceCategoryState extends State<ServiceCategory> {
                           .update({
                         "cost": cost.text,
                         "currentMileage": mileage.text,
-                        "nextServiceDate": dropdownvalue1,
-                        "serviceDate": DateTime.now(),
+                        "nextServiceDate": nextDate.text,
+                        "serviceDate": serviceDate.text,
                       });
+
+                      DateTime date = DateTime.parse(nextDate.text);
+
+                      int secondsToNextService =
+                          date.difference(DateTime.now()).inSeconds;
+
+                      await NotifyHelper.instance.scheduledNotification(
+                        "Service",
+                        "Your service is due today, get it serviced and maintained!",
+                        secondsToNextService,
+                      );
+
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (_) => HomeScreen()),
                           (route) => false);
