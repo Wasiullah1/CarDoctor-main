@@ -2,6 +2,7 @@ import 'package:cardoctor/Models/current_aap_user.dart';
 import 'package:cardoctor/components/button.dart';
 import 'package:cardoctor/screen/car_details/basicinfo.dart';
 import 'package:cardoctor/screen/car_details/detail.dart';
+import 'package:cardoctor/screen/homescreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -113,132 +114,203 @@ class _AddVehicleState extends State<AddVehicle> {
                     top: 30,
                     left: 10,
                     child: IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen())),
                       icon: Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,
                       ),
                     )),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: SingleChildScrollView(
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
                     child: Column(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       // crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        GridView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.size,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 0.7,
-                            ),
-                            itemBuilder: (context, index) {
-                              DocumentSnapshot car = snapshot.data!.docs[index];
-                              return Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                margin: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 40),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Image.asset(
-                                              "assets/images/mechanic.jpg")),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "${car['carMake']}",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primaryColor),
-                                          ),
-                                          InkWell(
-                                              onTap: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        title: Text(
-                                                            "Delete Vehicle"),
-                                                        content: Text(
-                                                            "Are you sure you want to delete this vehicle?"),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Text(
-                                                                  "Cancel")),
-                                                          TextButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                await FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        "garage")
-                                                                    .doc(uid)
-                                                                    .collection(
-                                                                        "cars")
-                                                                    .doc(car.id)
-                                                                    .delete();
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Text(
-                                                                  "Delete"))
-                                                        ],
-                                                      );
-                                                    });
-                                              },
-                                              child: Icon(Icons.delete))
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        "${car['modelYear'] ?? ""}",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal,
-                                            color: AppColors.primaryColor),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Expanded(
-                                        child: RoundButton(
-                                            title: "View Details",
-                                            onPress: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CarDetail()));
-                                            }),
-                                      )
-                                    ],
+                        SingleChildScrollView(
+                          child: GridView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.size,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: 0.5,
+                              ),
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot car =
+                                    snapshot.data!.docs[index];
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                ),
-                              );
-                            }),
+                                  margin: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 15),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 10),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.asset(
+                                                "assets/images/mechanic.jpg")),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "${car['carMake']}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      AppColors.primaryColor),
+                                            ),
+                                            InkWell(
+                                                onTap: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              "Delete Vehicle"),
+                                                          content: Text(
+                                                              "Are you sure you want to delete this vehicle?"),
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child: Text(
+                                                                    "Cancel")),
+                                                            TextButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          "garage")
+                                                                      .doc(uid)
+                                                                      .collection(
+                                                                          "cars")
+                                                                      .doc(car
+                                                                          .id)
+                                                                      .delete();
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child: Text(
+                                                                    "Delete"))
+                                                          ],
+                                                        );
+                                                      });
+                                                },
+                                                child: Icon(Icons.delete))
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Model",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                              Text(
+                                                "${car['modelYear'] ?? ""}",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                            ]),
+                                        SizedBox(height: 10),
+                                        Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Price",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                              Text(
+                                                "${car['cost'] ?? ""}",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                            ]),
+                                        SizedBox(height: 10),
+                                        Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Service",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                              Text(
+                                                "${car['serviceDate'] ?? ""}",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color:
+                                                        AppColors.primaryColor),
+                                              ),
+                                            ]),
+                                        SizedBox(height: 10),
+
+                                        // Expanded(
+                                        //   child: RoundButton(
+                                        //       title: "View Details",
+                                        //       onPress: () {
+                                        //         Navigator.push(
+                                        //             context,
+                                        //             MaterialPageRoute(
+                                        //                 builder: (context) =>
+                                        //                     CarDetail()));
+                                        //       }),
+                                        // )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
                       ],
                     ),
                   ),
