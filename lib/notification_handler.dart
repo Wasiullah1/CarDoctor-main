@@ -30,7 +30,7 @@ class NotifyHelper {
     );
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('appicon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     final InitializationSettings initializationSettings =
         InitializationSettings(
